@@ -8,18 +8,24 @@ import java.util.*;
 import org.json.*;
 
 public class StackOverflowDataCollector {
-  private static final String API_KEY = "YOUR_API_KEY_HERE";
+//  private static final String API_KEY = "YOUR_API_KEY_HERE";
   private static final String BASE_URL = "https://api.stackexchange.com/2.3";
   private static final int PAGE_SIZE = 100;
   private static final String TAG = "java";
   private static final int MAX_PAGES = 6;
-  private static final String DB_URL = "jdbc:postgresql://localhost:5432/postgres";
-  private static final String DB_USERNAME = "postgres";
-  private static final String DB_PASSWORD = "hhxx123.";
+  private static String DB_URL;
+  private static String DB_USERNAME;
+  private static String DB_PASSWORD;
   private static Connection conn = null;
 
   public static void main(String[] args) throws Exception {
     // Initialize database connection
+    File file = new File("C:\\Java2Proj\\src\\main\\resources\\templates\\databaseInfo\\dbInfo");
+    Scanner scanner = new Scanner(file);
+    DB_URL = scanner.nextLine();
+    DB_USERNAME = scanner.nextLine();
+    DB_PASSWORD = scanner.nextLine();
+    scanner.close();
     conn = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
 
     // Collect questions
@@ -51,6 +57,7 @@ public class StackOverflowDataCollector {
     File file = new File("C:\\Java2Proj\\src\\main\\resources\\templates\\questions\\json" + page + ".txt");
     Scanner scanner = new Scanner(file);
     String json = scanner.nextLine();
+    scanner.close();
 
     JSONObject obj = new JSONObject(json);
     return obj.getJSONArray("items");
