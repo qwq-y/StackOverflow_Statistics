@@ -48,7 +48,7 @@ public class StackOverflowDataCollector {
 //    String json = getUrlContents(url);
 
     /*------使用本地数据------*/
-    File file = new File("C:\\Users\\86188\\Desktop\\StackOverflowQuestions600\\json" + page + ".txt");
+    File file = new File("C:\\Java2Proj\\src\\main\\resources\\templates\\questions\\json" + page + ".txt");
     Scanner scanner = new Scanner(file);
     String json = scanner.nextLine();
 
