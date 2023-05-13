@@ -20,7 +20,7 @@ public class StackOverflowDataCollector {
 
   public static void main(String[] args) throws Exception {
     // Initialize database connection
-    File file = new File("C:\\Java2Proj\\src\\main\\resources\\templates\\databaseInfo\\dbInfo");
+    File file = new File("src/main/resources/templates/databaseInfo/dbInfo");
     Scanner scanner = new Scanner(file);
     DB_URL = scanner.nextLine();
     DB_USERNAME = scanner.nextLine();
@@ -54,7 +54,7 @@ public class StackOverflowDataCollector {
 //    String json = getUrlContents(url);
 
     /*------使用本地数据------*/
-    File file = new File("C:\\Java2Proj\\src\\main\\resources\\templates\\questions\\json" + page + ".txt");
+    File file = new File("src/main/resources/templates/questions/json" + page + ".txt");
     Scanner scanner = new Scanner(file);
     String json = scanner.nextLine();
     scanner.close();
