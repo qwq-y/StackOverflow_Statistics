@@ -44,7 +44,7 @@ public class StackOverflowDataCollector {
 
   private static void getAndStoreAnswers(long quesitonId) throws Exception {
     String url = "https://api.stackexchange.com/2.3/questions/" + quesitonId
-        + "/answers?site=stackoverflow";
+        + "/answers?site=stackoverflow&key=" + API_KEY;
     String json = getUrlContents(url);
     JSONObject obj = new JSONObject(json);
     JSONArray items = obj.getJSONArray("items");
@@ -56,7 +56,7 @@ public class StackOverflowDataCollector {
 
   private static void getAndStoreComments(long questionId) throws Exception {
     String url = "https://api.stackexchange.com/2.3/questions/" + questionId
-        + "/comments?site=stackoverflow";
+        + "/comments?site=stackoverflow&key=" + API_KEY;
     String json = getUrlContents(url);
     JSONObject obj = new JSONObject(json);
     JSONArray items = obj.getJSONArray("items");
@@ -71,7 +71,7 @@ public class StackOverflowDataCollector {
     int count = 0;
     while (page <= MAX_PAGES) {
       String url = BASE_URL + "/questions?page=" + page + "&pagesize=" + PAGE_SIZE
-          + "&order=desc&sort=votes&tagged=" + TAG + "&site=stackoverflow";
+          + "&order=desc&sort=votes&tagged=" + TAG + "&site=stackoverflow&key=" + API_KEY;
       String json = getUrlContents(url);
       JSONObject obj = new JSONObject(json);
       JSONArray items = obj.getJSONArray("items");
