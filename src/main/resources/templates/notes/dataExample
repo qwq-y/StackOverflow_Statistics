@@ -1,0 +1,72 @@
+爬取的questions中的数据示例：
+https://api.stackexchange.com/2.3/questions?page=1&pagesize=100&order=desc&sort=votes&tagged=java&site=stackoverflow
+
+{"tags":["java","c++","performance","cpu-architecture","branch-prediction"],
+"owner":{"account_id":31692,
+         "reputation":491761,
+         "user_id":87234,
+         "user_type":"registered",
+         "accept_rate":100,
+         "profile_image":"https://i.stack.imgur.com/FkjBe.png?s=256&g=1",
+         "display_name":"GManNickG",
+         "link":"https://stackoverflow.com/users/87234/gmannickg"},
+"is_answered":true,
+"view_count":1810966,
+"protected_date":1399067470,
+"accepted_answer_id":11227902,
+"answer_count":25,"score":26979,
+"last_activity_date":1683824982,
+"creation_date":1340805096,
+"last_edit_date":1683824982,
+"question_id":11227809,
+"content_license":"CC BY-SA 4.0",
+"link":"https://stackoverflow.com/questions/11227809/why-is-processing-a-sorted-array-faster-than-processing-an-unsorted-array",
+"title":"Why is processing a sorted array faster than processing an unsorted array?"},
+
+
+comment数据示例：
+https://api.stackexchange.com/2.3/questions/11227809/comments?site=stackoverflow
+
+{"owner":{"account_id":78868,
+          "reputation":318994,
+          "user_id":224132,
+          "user_type":"registered",
+          "accept_rate":83,
+          "profile_image":"https://i.stack.imgur.com/N4ivW.png?s=256&g=1",
+          "display_name":"Peter Cordes",
+          "link":"https://stackoverflow.com/users/224132/peter-cordes"},
+"reply_to_user":{"account_id":10541,
+                 "reputation":5175,
+                 "user_id":19974,
+                 "user_type":"registered",
+                 "accept_rate":100,
+                 "profile_image":"https://www.gravatar.com/avatar/1e1d9c504e0f6efe146938295a8ca59a?s=256&d=identicon&r=PG",
+                 "display_name":"Jason Short",
+                 "link":"https://stackoverflow.com/users/19974/jason-short"},
+"edited":false,
+"score":5,
+"creation_date":1657064804,
+"post_id":11227809,
+"comment_id":128719329,
+"content_license":"CC BY-SA 4.0",
+
+
+answer数据示例
+https://api.stackexchange.com/2.3/questions/11227809/answers?site=stackoverflow
+
+{"owner":{"account_id":78868,
+          "reputation":318994,
+          "user_id":224132,
+          "user_type":"registered",
+          "accept_rate":83,
+          "profile_image":"https://i.stack.imgur.com/N4ivW.png?s=256&g=1",
+          "display_name":"Peter Cordes",
+          "link":"https://stackoverflow.com/users/224132/peter-cordes"},
+"is_accepted":false,
+"score":476,
+"last_activity_date":1683739673,
+"last_edit_date":1683739673,
+"creation_date":1497786043,
+"answer_id":44614591,
+"question_id":11227809,
+"content_license":"CC BY-SA 4.0",
