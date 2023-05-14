@@ -299,8 +299,6 @@ public class StackOverflowDataCollector {
         pstmt.setLong(2, -1);
       } else {
         storeUser(owner);
-        // TODO
-        System.out.println(owner.toString());
         pstmt.setLong(2, owner.getLong("account_id"));
       }
     } else {
