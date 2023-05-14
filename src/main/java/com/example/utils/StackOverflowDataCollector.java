@@ -2,9 +2,11 @@ package com.example.utils;
 
 import java.io.*;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.util.*;
 
+import java.util.zip.GZIPInputStream;
 import org.json.*;
 
 public class StackOverflowDataCollector {
@@ -19,7 +21,7 @@ public class StackOverflowDataCollector {
   private static Connection conn = null;
 
   public static void main(String[] args) throws Exception {
-    // Initialize database connection
+    // 数据库连接
     File file = new File("C:\\Java2Proj\\src\\main\\resources\\templates\\databaseInfo\\dbInfo");
     Scanner scanner = new Scanner(file);
     DB_URL = scanner.nextLine();
@@ -28,7 +30,7 @@ public class StackOverflowDataCollector {
     scanner.close();
     conn = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
 
-    // Collect questions
+    // 存储questions
     int page = 1;
     int count = 0;
     while (page <= MAX_PAGES) {
@@ -40,24 +42,17 @@ public class StackOverflowDataCollector {
         System.out.println("Question #" + count + ": " + item.getString("title"));
       }
       page++;
-      Thread.sleep(1000); // Add a delay to avoid rate limit
+      // 添加delay防止rate limit
+      Thread.sleep(1000);
     }
 
-    // Close database connection
     conn.close();
   }
 
   private static JSONArray getQuestions(int page) throws Exception {
-//    String url = BASE_URL + "/questions?page=" + page + "&pagesize=" + PAGE_SIZE + "&order=desc&sort=votes&tagged=" + TAG + "&site=stackoverflow&key=" + API_KEY;
-    String url = BASE_URL + "/questions?page=" + page + "&pagesize=" + PAGE_SIZE + "&order=desc&sort=votes&tagged=" + TAG + "&site=stackoverflow";
+    String url = BASE_URL + "/questions?page=" + page + "&pagesize=" + PAGE_SIZE + "&order=desc&sort=votes&tagged=" + TAG + "&site=stackoverflow" /*+ "&key="  + API_KEY*/;
     System.out.println("url: " + url);
-//    String json = getUrlContents(url);
-
-    /*------使用本地数据------*/
-    File file = new File("C:\\Java2Proj\\src\\main\\resources\\templates\\questions\\json" + page + ".txt");
-    Scanner scanner = new Scanner(file);
-    String json = scanner.nextLine();
-    scanner.close();
+    String json = getUrlContents(url);
 
     JSONObject obj = new JSONObject(json);
     return obj.getJSONArray("items");
@@ -65,15 +60,31 @@ public class StackOverflowDataCollector {
 
   private static String getUrlContents(String urlString) throws Exception {
     URL url = new URL(urlString);
-    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-    conn.setRequestMethod("GET");
-    BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+    URLConnection conn = (URLConnection) url.openConnection();
+    conn.setConnectTimeout(5000);
+    conn.setReadTimeout(15000);
+    conn.connect();
+
+    // 检查是否为gzip压缩格式
+    boolean isGzip = false;
+    String contentEncoding = conn.getContentEncoding();
+    if (contentEncoding != null && contentEncoding.toLowerCase().contains("gzip")) {
+      isGzip = true;
+    }
+
+    // 读取数据
+    InputStream inputStream = conn.getInputStream();
+    if (isGzip) {
+      inputStream = new GZIPInputStream(inputStream);
+    }
+    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
     String line;
     StringBuilder sb = new StringBuilder();
-    while ((line = rd.readLine()) != null) {
+    while ((line = reader.readLine()) != null) {
+      System.out.println(line);
       sb.append(line);
     }
-    rd.close();
+    reader.close();
     return sb.toString();
   }
 
@@ -191,7 +202,8 @@ public class StackOverflowDataCollector {
  */
 
 /**
- * json中的数据示例：
+ * 爬取的questions中的数据示例：
+ * https://api.stackexchange.com/2.3/questions?page=1&pagesize=100&order=desc&sort=votes&tagged=java&site=stackoverflow
  *
  * {"tags":["java","c++","performance","cpu-architecture","branch-prediction"],
  * "owner":{"account_id":31692,
@@ -214,4 +226,28 @@ public class StackOverflowDataCollector {
  * "content_license":"CC BY-SA 4.0",
  * "link":"https://stackoverflow.com/questions/11227809/why-is-processing-a-sorted-array-faster-than-processing-an-unsorted-array",
  * "title":"Why is processing a sorted array faster than processing an unsorted array?"},
+ *
+ *
+ * 爬取的post的数据示例
+ * https://api.stackexchange.com/2.3/posts/12345/comments?site=stackoverflow
+ *
+ * {"items":[{"owner":{"account_id":31692,
+ *            "reputation":491771,
+ *            "user_id":87234,
+ *            "user_type":"registered",
+ *            "accept_rate":100,
+ *            "profile_image":"https://i.stack.imgur.com/FkjBe.png?s=256&g=1",
+ *            "display_name":"GManNickG",
+ *            "link":"https://stackoverflow.com/users/87234/gmannickg"},
+ * "score":26980,
+ * "last_edit_date":1683824982,
+ * "last_activity_date":1683824982,
+ * "creation_date":1340805096,
+ * "post_type":"question",
+ * "post_id":11227809,
+ * "content_license":"CC BY-SA 4.0",
+ * "link":"https://stackoverflow.com/q/11227809"}],
+ * "has_more":false,
+ * "quota_max":300,
+ * "quota_remaining":299}
  */
