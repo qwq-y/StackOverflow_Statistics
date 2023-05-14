@@ -1,4 +1,9 @@
 truncate table user_ cascade;
+truncate table question cascade;
+truncate table answer cascade;
+truncate table comment cascade;
+insert into user_ values (-1, null, null, null, null, null, null, null);
+
 create table user_
 (
     account_id    bigint primary key,
@@ -11,8 +16,6 @@ create table user_
     link          varchar
 );
 
-drop table question cascade;
-truncate table question cascade;
 create table question
 (
     tags               varchar,
@@ -31,7 +34,6 @@ create table question
     title              varchar
 );
 
-truncate table answer cascade;
 create table answer
 (
     owner_account_id   bigint references user_ (account_id),
@@ -45,7 +47,6 @@ create table answer
     content_license    varchar
 );
 
-truncate table comment cascade;
 create table comment
 (
     owner_account_id bigint references user_ (account_id),

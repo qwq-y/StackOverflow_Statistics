@@ -44,7 +44,7 @@ public class StackOverflowDataCollector {
 
   private static void getAndStoreAnswers(long quesitonId) throws Exception {
     String url = "https://api.stackexchange.com/2.3/questions/" + quesitonId
-        + "/answers?site=stackoverflow&key=" + API_KEY;
+        + "/answers?site=stackoverflow";
     String json = getUrlContents(url);
     JSONObject obj = new JSONObject(json);
     JSONArray items = obj.getJSONArray("items");
@@ -56,7 +56,7 @@ public class StackOverflowDataCollector {
 
   private static void getAndStoreComments(long questionId) throws Exception {
     String url = "https://api.stackexchange.com/2.3/questions/" + questionId
-        + "/comments?site=stackoverflow&key=" + API_KEY;
+        + "/comments?site=stackoverflow";
     String json = getUrlContents(url);
     JSONObject obj = new JSONObject(json);
     JSONArray items = obj.getJSONArray("items");
@@ -71,7 +71,7 @@ public class StackOverflowDataCollector {
     int count = 0;
     while (page <= MAX_PAGES) {
       String url = BASE_URL + "/questions?page=" + page + "&pagesize=" + PAGE_SIZE
-          + "&order=desc&sort=votes&tagged=" + TAG + "&site=stackoverflow&key=" + API_KEY;
+          + "&order=desc&sort=votes&tagged=" + TAG + "&site=stackoverflow";
       String json = getUrlContents(url);
       JSONObject obj = new JSONObject(json);
       JSONArray items = obj.getJSONArray("items");
@@ -162,6 +162,8 @@ public class StackOverflowDataCollector {
       } else {
         pstmt.setNull(8, Types.VARCHAR);
       }
+
+      pstmt.executeUpdate();
     } catch (Exception e) {
       System.out.println("----------------user skipped----------------");
     }
@@ -173,15 +175,23 @@ public class StackOverflowDataCollector {
 
     if (item.has("owner")) {
       JSONObject owner = item.getJSONObject("owner");
-      pstmt.setLong(1, owner.getLong("account_id"));
-      storeUser(owner);
+      if (owner.getString("user_type").equals("does_not_exist")) {
+        pstmt.setLong(1, -1);
+      } else {
+        storeUser(owner);
+        pstmt.setLong(1, owner.getLong("account_id"));
+      }
     } else {
       pstmt.setNull(1, Types.BIGINT);
     }
     if (item.has("reply_to_user")) {
       JSONObject replyToUser = item.getJSONObject("reply_to_user");
-      pstmt.setLong(1, replyToUser.getLong("account_id"));
-      storeUser(replyToUser);
+      if (replyToUser.getString("user_type").equals("does_not_exist")) {
+        pstmt.setLong(2, -1);
+      } else {
+        storeUser(replyToUser);
+        pstmt.setLong(2, replyToUser.getLong("account_id"));
+      }
     } else {
       pstmt.setNull(2, Types.BIGINT);
     }
@@ -213,6 +223,8 @@ public class StackOverflowDataCollector {
     } else {
       pstmt.setNull(8, Types.VARCHAR);
     }
+
+    pstmt.executeUpdate();
   }
 
   private static void storeAnswers(JSONObject item) throws Exception {
@@ -221,14 +233,12 @@ public class StackOverflowDataCollector {
 
     if (item.has("owner")) {
       JSONObject owner = item.getJSONObject("owner");
-      // TODO
-      System.out.println("---------------------------------------");
-      System.out.println(owner.toString());
-      System.out.println("---------------------------------------");
-      long test = owner.getLong("account_id");
-      System.out.println(test);
-      pstmt.setLong(1, owner.getLong("account_id"));
-      storeUser(owner);
+      if (owner.getString("user_type").equals("does_not_exist")) {
+        pstmt.setLong(1, -1);
+      } else {
+        storeUser(owner);
+        pstmt.setLong(1, owner.getLong("account_id"));
+      }
     } else {
       pstmt.setNull(1, Types.BIGINT);
     }
@@ -270,88 +280,92 @@ public class StackOverflowDataCollector {
     } else {
       pstmt.setNull(9, Types.VARCHAR);
     }
+
+    pstmt.executeUpdate();
   }
 
   private static void storeQuestions(JSONObject item) throws Exception {
     PreparedStatement pstmt = conn.prepareStatement(
         "INSERT INTO question VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-    try {
-      if (item.has("tags")) {
-        pstmt.setString(1, item.getJSONArray("tags").toString());
-      } else {
-        pstmt.setNull(1, Types.VARCHAR);
-      }
-      if (item.has("owner")) {
-        JSONObject owner = item.getJSONObject("owner");
-        pstmt.setLong(1, owner.getLong("account_id"));
-        storeUser(owner);
-      } else {
-        pstmt.setNull(2, Types.BIGINT);
-      }
-      if (item.has("is_answered")) {
-        pstmt.setBoolean(3, item.getBoolean("is_answered"));
-      } else {
-        pstmt.setNull(3, Types.BOOLEAN);
-      }
-      if (item.has("view_count")) {
-        pstmt.setLong(4, item.getLong("view_count"));
-      } else {
-        pstmt.setNull(4, Types.BIGINT);
-      }
-      if (item.has("protected_date")) {
-        pstmt.setLong(5, item.getLong("protected_date"));
-      } else {
-        pstmt.setNull(5, Types.BIGINT);
-      }
-      if (item.has("accepted_answer_id")) {
-        pstmt.setLong(6, item.getLong("accepted_answer_id"));
-      } else {
-        pstmt.setNull(6, Types.BIGINT);
-      }
-      if (item.has("answer_count")) {
-        pstmt.setLong(7, item.getLong("answer_count"));
-      } else {
-        pstmt.setNull(7, Types.BIGINT);
-      }
-      if (item.has("last_activity_date")) {
-        pstmt.setLong(8, item.getLong("last_activity_date"));
-      } else {
-        pstmt.setNull(8, Types.BIGINT);
-      }
-      if (item.has("creation_date")) {
-        pstmt.setLong(9, item.getLong("creation_date"));
-      } else {
-        pstmt.setNull(9, Types.BIGINT);
-      }
-      if (item.has("last_edit_date")) {
-        pstmt.setLong(10, item.getLong("last_edit_date"));
-      } else {
-        pstmt.setNull(10, Types.BIGINT);
-      }
-
-      pstmt.setLong(11, item.getLong("question_id"));
-
-      if (item.has("content_license")) {
-        pstmt.setString(12, item.getString("content_license"));
-      } else {
-        pstmt.setNull(12, Types.VARCHAR);
-      }
-      if (item.has("link")) {
-        pstmt.setString(13, item.getString("link"));
-      } else {
-        pstmt.setNull(13, Types.VARCHAR);
-      }
-      if (item.has("title")) {
-        pstmt.setString(14, item.getString("title"));
-      } else {
-        pstmt.setNull(14, Types.VARCHAR);
-      }
-      pstmt.executeUpdate();
-    } catch (Exception e) {
-      System.out.println("----------------question skipped----------------");
-      return;
+    if (item.has("tags")) {
+      pstmt.setString(1, item.getJSONArray("tags").toString());
+    } else {
+      pstmt.setNull(1, Types.VARCHAR);
     }
+    if (item.has("owner")) {
+      JSONObject owner = item.getJSONObject("owner");
+      if (owner.getString("user_type").equals("does_not_exist")) {
+        pstmt.setLong(2, -1);
+      } else {
+        storeUser(owner);
+        // TODO
+        System.out.println(owner.toString());
+        pstmt.setLong(2, owner.getLong("account_id"));
+      }
+    } else {
+      pstmt.setNull(2, Types.BIGINT);
+    }
+    if (item.has("is_answered")) {
+      pstmt.setBoolean(3, item.getBoolean("is_answered"));
+    } else {
+      pstmt.setNull(3, Types.BOOLEAN);
+    }
+    if (item.has("view_count")) {
+      pstmt.setLong(4, item.getLong("view_count"));
+    } else {
+      pstmt.setNull(4, Types.BIGINT);
+    }
+    if (item.has("protected_date")) {
+      pstmt.setLong(5, item.getLong("protected_date"));
+    } else {
+      pstmt.setNull(5, Types.BIGINT);
+    }
+    if (item.has("accepted_answer_id")) {
+      pstmt.setLong(6, item.getLong("accepted_answer_id"));
+    } else {
+      pstmt.setNull(6, Types.BIGINT);
+    }
+    if (item.has("answer_count")) {
+      pstmt.setLong(7, item.getLong("answer_count"));
+    } else {
+      pstmt.setNull(7, Types.BIGINT);
+    }
+    if (item.has("last_activity_date")) {
+      pstmt.setLong(8, item.getLong("last_activity_date"));
+    } else {
+      pstmt.setNull(8, Types.BIGINT);
+    }
+    if (item.has("creation_date")) {
+      pstmt.setLong(9, item.getLong("creation_date"));
+    } else {
+      pstmt.setNull(9, Types.BIGINT);
+    }
+    if (item.has("last_edit_date")) {
+      pstmt.setLong(10, item.getLong("last_edit_date"));
+    } else {
+      pstmt.setNull(10, Types.BIGINT);
+    }
+
+    pstmt.setLong(11, item.getLong("question_id"));
+
+    if (item.has("content_license")) {
+      pstmt.setString(12, item.getString("content_license"));
+    } else {
+      pstmt.setNull(12, Types.VARCHAR);
+    }
+    if (item.has("link")) {
+      pstmt.setString(13, item.getString("link"));
+    } else {
+      pstmt.setNull(13, Types.VARCHAR);
+    }
+    if (item.has("title")) {
+      pstmt.setString(14, item.getString("title"));
+    } else {
+      pstmt.setNull(14, Types.VARCHAR);
+    }
+
+    pstmt.executeUpdate();
   }
 }
 

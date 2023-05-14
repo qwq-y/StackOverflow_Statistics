@@ -48,7 +48,7 @@ https://api.stackexchange.com/2.3/questions/11227809/comments?site=stackoverflow
 "creation_date":1657064804,
 "post_id":11227809,
 "comment_id":128719329,
-"content_license":"CC BY-SA 4.0",
+"content_license":"CC BY-SA 4.0"},
 
 
 answer数据示例
@@ -69,4 +69,9 @@ https://api.stackexchange.com/2.3/questions/11227809/answers?site=stackoverflow
 "creation_date":1497786043,
 "answer_id":44614591,
 "question_id":11227809,
-"content_license":"CC BY-SA 4.0",
+"content_license":"CC BY-SA 4.0"},
+
+
+已删除的user:
+{"user_type":"does_not_exist",
+"display_name":"user1196549"}
