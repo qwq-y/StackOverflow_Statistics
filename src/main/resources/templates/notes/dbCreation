@@ -2,7 +2,9 @@ truncate table user_ cascade;
 truncate table question cascade;
 truncate table answer cascade;
 truncate table comment cascade;
-insert into user_ values (-1, null, null, null, null, null, null, null);
+truncate table question_tag;
+insert into user_
+values (-1, null, null, null, null, null, null, null);
 
 create table user_
 (
@@ -18,7 +20,6 @@ create table user_
 
 create table question
 (
-    tags               varchar,
     owner_account_id   bigint references user_ (account_id),
     is_answered        bool,
     view_count         bigint,
@@ -57,5 +58,12 @@ create table comment
     post_id          bigint references question (question_id),
     comment_id       bigint primary key,
     content_license  varchar
-)
+);
+
+create table question_tag
+(
+    question_id bigint references question (question_id),
+    tag         varchar,
+    primary key (question_id, tag)
+);
 

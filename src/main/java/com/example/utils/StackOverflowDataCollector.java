@@ -164,6 +164,7 @@ public class StackOverflowDataCollector {
       }
 
       pstmt.executeUpdate();
+      pstmt.close();
     } catch (Exception e) {
       System.out.println("----------------user skipped----------------");
     }
@@ -225,6 +226,7 @@ public class StackOverflowDataCollector {
     }
 
     pstmt.executeUpdate();
+    pstmt.close();
   }
 
   private static void storeAnswers(JSONObject item) throws Exception {
@@ -282,88 +284,101 @@ public class StackOverflowDataCollector {
     }
 
     pstmt.executeUpdate();
+    pstmt.close();
   }
 
   private static void storeQuestions(JSONObject item) throws Exception {
     PreparedStatement pstmt = conn.prepareStatement(
-        "INSERT INTO question VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        "INSERT INTO question VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-    if (item.has("tags")) {
-      pstmt.setString(1, item.getJSONArray("tags").toString());
-    } else {
-      pstmt.setNull(1, Types.VARCHAR);
-    }
     if (item.has("owner")) {
       JSONObject owner = item.getJSONObject("owner");
       if (owner.getString("user_type").equals("does_not_exist")) {
-        pstmt.setLong(2, -1);
+        pstmt.setLong(1, -1);
       } else {
         storeUser(owner);
-        pstmt.setLong(2, owner.getLong("account_id"));
+        System.out.println(owner.toString());
+        pstmt.setLong(1, owner.getLong("account_id"));
       }
     } else {
-      pstmt.setNull(2, Types.BIGINT);
+      pstmt.setNull(1, Types.BIGINT);
     }
     if (item.has("is_answered")) {
-      pstmt.setBoolean(3, item.getBoolean("is_answered"));
+      pstmt.setBoolean(2, item.getBoolean("is_answered"));
     } else {
-      pstmt.setNull(3, Types.BOOLEAN);
+      pstmt.setNull(2, Types.BOOLEAN);
     }
     if (item.has("view_count")) {
-      pstmt.setLong(4, item.getLong("view_count"));
+      pstmt.setLong(3, item.getLong("view_count"));
+    } else {
+      pstmt.setNull(3, Types.BIGINT);
+    }
+    if (item.has("protected_date")) {
+      pstmt.setLong(4, item.getLong("protected_date"));
     } else {
       pstmt.setNull(4, Types.BIGINT);
     }
-    if (item.has("protected_date")) {
-      pstmt.setLong(5, item.getLong("protected_date"));
+    if (item.has("accepted_answer_id")) {
+      pstmt.setLong(5, item.getLong("accepted_answer_id"));
     } else {
       pstmt.setNull(5, Types.BIGINT);
     }
-    if (item.has("accepted_answer_id")) {
-      pstmt.setLong(6, item.getLong("accepted_answer_id"));
+    if (item.has("answer_count")) {
+      pstmt.setLong(6, item.getLong("answer_count"));
     } else {
       pstmt.setNull(6, Types.BIGINT);
     }
-    if (item.has("answer_count")) {
-      pstmt.setLong(7, item.getLong("answer_count"));
+    if (item.has("last_activity_date")) {
+      pstmt.setLong(7, item.getLong("last_activity_date"));
     } else {
       pstmt.setNull(7, Types.BIGINT);
     }
-    if (item.has("last_activity_date")) {
-      pstmt.setLong(8, item.getLong("last_activity_date"));
+    if (item.has("creation_date")) {
+      pstmt.setLong(8, item.getLong("creation_date"));
     } else {
       pstmt.setNull(8, Types.BIGINT);
     }
-    if (item.has("creation_date")) {
-      pstmt.setLong(9, item.getLong("creation_date"));
+    if (item.has("last_edit_date")) {
+      pstmt.setLong(9, item.getLong("last_edit_date"));
     } else {
       pstmt.setNull(9, Types.BIGINT);
     }
-    if (item.has("last_edit_date")) {
-      pstmt.setLong(10, item.getLong("last_edit_date"));
-    } else {
-      pstmt.setNull(10, Types.BIGINT);
-    }
 
-    pstmt.setLong(11, item.getLong("question_id"));
+    pstmt.setLong(10, item.getLong("question_id"));
 
     if (item.has("content_license")) {
-      pstmt.setString(12, item.getString("content_license"));
+      pstmt.setString(11, item.getString("content_license"));
+    } else {
+      pstmt.setNull(11, Types.VARCHAR);
+    }
+    if (item.has("link")) {
+      pstmt.setString(12, item.getString("link"));
     } else {
       pstmt.setNull(12, Types.VARCHAR);
     }
-    if (item.has("link")) {
-      pstmt.setString(13, item.getString("link"));
+    if (item.has("title")) {
+      pstmt.setString(13, item.getString("title"));
     } else {
       pstmt.setNull(13, Types.VARCHAR);
     }
-    if (item.has("title")) {
-      pstmt.setString(14, item.getString("title"));
-    } else {
-      pstmt.setNull(14, Types.VARCHAR);
-    }
 
     pstmt.executeUpdate();
+    pstmt.close();
+
+    if (item.has("tags")) {
+      JSONArray tags = item.getJSONArray("tags");
+      long questionId = item.getLong("question_id");
+      for (int i = 0; i < tags.length(); i++) {
+        String tag = tags.getString(i);
+        String sql = "INSERT INTO question_tag (question_id, tag) VALUES (?, ?)";
+        PreparedStatement ps = conn.prepareStatement(
+            "INSERT INTO question_tag (question_id, tag) VALUES (?, ?)");
+        ps.setLong(1, questionId);
+        ps.setString(2, tag);
+        ps.executeUpdate();
+        ps.close();
+      }
+    }
   }
 }
 
