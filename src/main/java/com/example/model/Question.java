@@ -14,17 +14,16 @@ import lombok.Data;
 public class Question {
   @Id
   @GeneratedValue
-  private String tags;
-  private long ownerAccountId;
-  private boolean isAnswered;
-  private long viewCount;
-  private long protectedDate;
-  private long acceptedAnswerId;
-  private long answerCount;
-  private long lastActivityDate;
-  private long creationDate;
-  private long lastEditDate;
-  private long questionId;
+  private Long ownerAccountId;
+  private Boolean isAnswered;
+  private Long viewCount;
+  private Long protectedDate;
+  private Long acceptedAnswerId;
+  private Long answerCount;
+  private Long lastActivityDate;
+  private Long creationDate;
+  private Long lastEditDate;
+  private Long questionId;
   private String contentLicense;
   private String link;
   private String title;

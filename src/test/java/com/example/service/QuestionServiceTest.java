@@ -20,15 +20,8 @@ public class QuestionServiceTest {
 
   @Test
   void testGetQuestions() {
-    System.out.println("-------------------------------------------------");
     List<Question> questions = questionService.getQuestions();
-    for (Question question : questions) {
-      System.out.println(question.getQuestionId());
-    }
-    System.out.println("-------------------------------------------------");
-    System.out.println(questions.size());
     assert (questions.size() == 600);
-//    assertThat(questions.size()).isEqualTo(2);
   }
 
 }
