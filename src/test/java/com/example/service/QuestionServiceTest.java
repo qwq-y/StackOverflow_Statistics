@@ -22,4 +22,22 @@ public class QuestionServiceTest {
     assert (questions.size() == 600);
   }
 
+  @Test
+  void testCountNoAnswerQuestions() {
+    long cnt = questionService.getNoAnswerQuestionCount();
+    System.out.println("# no answer questions ===========> " + cnt);
+  }
+
+  @Test
+  void testGetMaxAnswerCount() {
+    long cnt = questionService.getMaxAnswerCount();
+    System.out.println("# max answer count ===========> " + cnt);
+  }
+
+  @Test
+  void testGetCountByAnswerCountGreaterThan() {
+    long cnt = questionService.getCountByAnswerCountGreaterThan(Long.valueOf(10));
+    System.out.println("# answer count greater than 10 ===========> " + cnt);
+  }
+
 }
