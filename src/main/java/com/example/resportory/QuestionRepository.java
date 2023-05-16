@@ -12,6 +12,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 //
 //}
 
-public interface QuestionResportory extends JpaRepository<Question, Long> {
+public interface QuestionRepository extends JpaRepository<Question, Long> {
 
 }

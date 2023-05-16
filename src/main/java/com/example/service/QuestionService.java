@@ -1,7 +1,7 @@
 package com.example.service;
 
 import com.example.model.Question;
-import com.example.resportory.QuestionResportory;
+import com.example.resportory.QuestionRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,14 +9,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class QuestionService {
 
-  private final QuestionResportory questionResportory;
+  private final QuestionRepository questionRepository;
 
   @Autowired
-  private QuestionService(QuestionResportory questionResportory) {
-    this.questionResportory = questionResportory;
+  public QuestionService(QuestionRepository questionRepository) {
+    this.questionRepository = questionRepository;
   }
 
   public List<Question> getQuestions() {
-    return questionResportory.findAll();
+    return questionRepository.findAll();
   }
 }

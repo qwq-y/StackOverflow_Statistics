@@ -1,13 +1,11 @@
 package com.example.service;
 
 import com.example.model.Question;
-import com.example.resportory.QuestionResportory;
+import com.example.resportory.QuestionRepository;
 import java.util.List;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.util.Assert;
 
 @SpringBootTest
 public class QuestionServiceTest {
@@ -16,7 +14,7 @@ public class QuestionServiceTest {
   private QuestionService questionService;
 
   @Autowired
-  private QuestionResportory questionResportory;
+  private QuestionRepository questionRepository;
 
   @Test
   void testGetQuestions() {
