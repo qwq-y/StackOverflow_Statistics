@@ -4,7 +4,6 @@ import com.example.model.Question;
 import com.example.service.QuestionService;
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -49,11 +48,6 @@ public class QuestionController {
   public Double getAvgAnswerCount() {
     return questionService.getAvgAnswerCount();
   }
-
-//  @GetMapping("/countByAnswerCountBetween/{min}/{max}")
-//  public Long getCountByAnswerCountBetween(@PathVariable Long min, @PathVariable Long max) {
-//    return questionService.getCountByAnswerCountBetween(min, max);
-//  }
 
   @GetMapping("/answerCountDistribution")
   public List<Object[]> getAnswerCountDistribution() {

@@ -24,10 +24,6 @@ public class QuestionService {
     return questionRepository.countByAnswerCountEquals(Long.valueOf(0));
   }
 
-//  public Long getCountByAnswerCountBetween(Long min, Long max) {
-//    return questionRepository.countByAnswerCountBetween(min, max);
-//  }
-
   public Long getMaxAnswerCount() {
     return questionRepository.findMaxAnswerCount();
   }
