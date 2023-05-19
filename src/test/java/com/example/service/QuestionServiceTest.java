@@ -1,7 +1,7 @@
 package com.example.service;
 
 import com.example.model.Question;
-import com.example.resportory.QuestionRepository;
+import com.example.repository.QuestionRepository;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,10 +34,10 @@ public class QuestionServiceTest {
     System.out.println("# max answer count ===========> " + cnt);
   }
 
-  @Test
-  void testGetCountByAnswerCountGreaterThan() {
-    long cnt = questionService.getCountByAnswerCountGreaterThan(Long.valueOf(10));
-    System.out.println("# answer count greater than 10 ===========> " + cnt);
-  }
+//  @Test
+//  void testGetCountByAnswerCountGreaterThan() {
+//    long cnt = questionService.getCountByAnswerCountGreaterThan(Long.valueOf(10));
+//    System.out.println("# answer count greater than 10 ===========> " + cnt);
+//  }
 
 }

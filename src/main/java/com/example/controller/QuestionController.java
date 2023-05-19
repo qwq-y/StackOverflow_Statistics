@@ -3,7 +3,6 @@ package com.example.controller;
 import com.example.model.Question;
 import com.example.service.QuestionService;
 import java.util.List;
-import java.util.Map;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
  * What percentage of questions don't have any answer?
  * What is the average and maximum number of answers?
  * What is the distribution of the number of answers?
+ *
+ * What percentage of questions have accepted answers (one question could only have one accepted answer)?
+ * What is the distribution of question resolution time (i.e., the duration between the question posting
+ * time and the posting time of the accepted answer)?
+ * What percentage of questions have non-accepted answers (i.e., answers that are not marked as
+ * accepted) that have received more upvotes than the accepted answers?
  */
 
 @RestController
@@ -45,24 +50,29 @@ public class QuestionController {
     return questionService.getAvgAnswerCount();
   }
 
-  @GetMapping("/countByAnswerCount/{answerCount}")
-  private Long getCountByAnswerCount(@PathVariable Long answerCount) {
-    return questionService.getCountByAnswerCount(answerCount);
+//  @GetMapping("/countByAnswerCountBetween/{min}/{max}")
+//  public Long getCountByAnswerCountBetween(@PathVariable Long min, @PathVariable Long max) {
+//    return questionService.getCountByAnswerCountBetween(min, max);
+//  }
+
+  @GetMapping("/answerCountDistribution")
+  public List<Object[]> getAnswerCountDistribution() {
+    return questionService.getAnswerCountDistribution();
   }
 
-  @GetMapping("/countByAnswerCountGreaterThan/{answerCount}")
-  public Long getCountByAnswerCountGreaterThan(@PathVariable Long answerCount) {
-    return questionService.getCountByAnswerCountGreaterThan(answerCount);
+  @GetMapping("/countByAcceptedAnswerIdIsNotNull")
+  public Long getCountByAcceptedAnswerIdIsNotNull() {
+    return questionService.getCountByAcceptedAnswerIdIsNotNull();
   }
 
-  @GetMapping("/countByAnswerCountLessThan/{answerCount}")
-  public Long getCountByAnswerCountLessThan(@PathVariable Long answerCount) {
-    return questionService.getCountByAnswerCountLessThan(answerCount);
+  @GetMapping("/questionResolutionTimeDistribution")
+  public List<Object[]> getQuestionResolutionTimeDistribution() {
+    return questionService.getQuestionResolutionTimeDistribution();
   }
 
-  @GetMapping("/countByAnswerCountBetween/{min}/{max}")
-  public Long getCountByAnswerCountBetween(@PathVariable Long min, @PathVariable Long max) {
-    return questionService.getCountByAnswerCountBetween(min, max);
+  @GetMapping("/countQuestionsWithLowerAcceptedAnswerScore")
+  public Long getCountQuestionsWithLowerAcceptedAnswerScore() {
+    return questionService.getCountQuestionsWithLowerAcceptedAnswerScore();
   }
 
 }

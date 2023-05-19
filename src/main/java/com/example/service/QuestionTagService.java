@@ -1,7 +1,7 @@
 package com.example.service;
 
 import com.example.model.QuestionTag;
-import com.example.resportory.QuestionTagRepository;
+import com.example.repository.QuestionTagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

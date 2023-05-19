@@ -1,7 +1,7 @@
 package com.example.service;
 
 import com.example.model.Question;
-import com.example.resportory.QuestionRepository;
+import com.example.repository.QuestionRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,21 +24,9 @@ public class QuestionService {
     return questionRepository.countByAnswerCountEquals(Long.valueOf(0));
   }
 
-  public Long getCountByAnswerCount(Long answerCount) {
-    return questionRepository.countByAnswerCountEquals(answerCount);
-  }
-
-  public Long getCountByAnswerCountGreaterThan(Long answerCount) {
-    return questionRepository.countByAnswerCountGreaterThan(answerCount);
-  }
-
-  public Long getCountByAnswerCountLessThan(Long answerCount) {
-    return questionRepository.countByAnswerCountLessThan(answerCount);
-  }
-
-  public Long getCountByAnswerCountBetween(Long min, Long max) {
-    return questionRepository.countByAnswerCountBetween(min, max);
-  }
+//  public Long getCountByAnswerCountBetween(Long min, Long max) {
+//    return questionRepository.countByAnswerCountBetween(min, max);
+//  }
 
   public Long getMaxAnswerCount() {
     return questionRepository.findMaxAnswerCount();
@@ -46,6 +34,22 @@ public class QuestionService {
 
   public Double getAvgAnswerCount() {
     return questionRepository.findAvgAnswerCount();
+  }
+
+  public List<Object[]> getAnswerCountDistribution() {
+    return questionRepository.findAnswerCountDistribution();
+  }
+
+  public Long getCountByAcceptedAnswerIdIsNotNull() {
+    return questionRepository.countByAcceptedAnswerIdIsNotNull();
+  }
+
+  public List<Object[]> getQuestionResolutionTimeDistribution() {
+    return questionRepository.findQuestionResolutionTimeDistribution();
+  }
+
+  public Long getCountQuestionsWithLowerAcceptedAnswerScore() {
+    return questionRepository.countQuestionsWithLowerAcceptedAnswerScore();
   }
 
 }

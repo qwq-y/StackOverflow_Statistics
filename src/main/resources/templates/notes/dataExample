@@ -51,7 +51,7 @@ https://api.stackexchange.com/2.3/questions/11227809/comments?site=stackoverflow
 "content_license":"CC BY-SA 4.0"},
 
 
-answer数据示例
+answer数据示例:
 https://api.stackexchange.com/2.3/questions/11227809/answers?site=stackoverflow
 
 {"owner":{"account_id":78868,

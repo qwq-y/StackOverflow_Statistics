@@ -1,4 +1,4 @@
-package com.example.resportory;
+package com.example.repository;
 
 import com.example.model.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
