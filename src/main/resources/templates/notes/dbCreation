@@ -1,4 +1,9 @@
 truncate table user_ cascade;
+
+drop table question cascade;
+drop table answer cascade;
+drop table comment cascade;
+
 truncate table question cascade;
 truncate table answer cascade;
 truncate table comment cascade;
@@ -32,7 +37,9 @@ create table question
     question_id        bigint primary key,
     content_license    varchar,
     link               varchar,
-    title              varchar
+    title              varchar,
+    score              bigint,
+    body               varchar
 );
 
 create table answer
@@ -45,7 +52,8 @@ create table answer
     creation_date      bigint,
     answer_id          bigint primary key,
     question_id        bigint references question (question_id),
-    content_license    varchar
+    content_license    varchar,
+    body               varchar
 );
 
 create table comment
@@ -57,7 +65,8 @@ create table comment
     creation_date    bigint,
     post_id          bigint references question (question_id),
     comment_id       bigint primary key,
-    content_license  varchar
+    content_license  varchar,
+    body             varchar
 );
 
 create table question_tag

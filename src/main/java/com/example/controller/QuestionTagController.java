@@ -4,6 +4,7 @@ import com.example.model.QuestionTag;
 import java.util.ArrayList;
 import java.util.List;
 import com.example.service.QuestionTagService;
+import java.util.Map;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,27 +40,14 @@ public class QuestionTagController {
         return questionTagService.getTagWithJavaFrequency();
     }
 
-//    @GetMapping("/topTagCombinations")
-//    public Object[][] getTagCombinationsWithScoreAbove100() {
-//        List<List<String>> tagCombinations = questionTagService.getAllTagCombinations();
-//        List<Object[]> filteredCombinations = new ArrayList<>();
-//
-//        for (List<String> combination : tagCombinations) {
-//            Long totalScore = questionTagService.getTagCombinationScore(combination);
-//            if (totalScore != null && totalScore > 100) {
-//                Object[] combinationScore = new Object[] { combination, totalScore };
-//                filteredCombinations.add(combinationScore);
-//            }
-//        }
-//
-//        return filteredCombinations.toArray(new Object[0][]);
-//    }
-
     @GetMapping("/tagCombinationScores")
     public List<Object[]> getTagCombinationScores() {
         return questionTagService.getTagCombinationScores();
     }
 
-
+    @GetMapping("/tagCombinationViews")
+    public List<Object[]> getTagCombinationViews() {
+        return questionTagService.getTagCombinationViews();
+    }
 
 }

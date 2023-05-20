@@ -4,7 +4,6 @@ import com.example.model.QuestionTag;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 public interface QuestionTagRepository extends JpaRepository<QuestionTag, Long> {
 
@@ -20,29 +19,22 @@ public interface QuestionTagRepository extends JpaRepository<QuestionTag, Long> 
       "ORDER BY count DESC", nativeQuery = true)
   List<Object[]> findTagWithJavaFrequency();
 
-//  @Query(value = "SELECT SUM(q.score) " +
-//      "FROM question_tag qt " +
-//      "JOIN question q ON qt.question_id = q.question_id " +
-//      "WHERE qt.tag IN :tags", nativeQuery = true)
-//  Long getTagCombinationScore(@Param("tags") List<String> tags);
-
-  // TODO: question里没有score
-  @Query(value = "SELECT qt1.tag AS tag1, qt2.tag AS tag2, SUM(q.score) AS total_score " +
+  @Query(value = "SELECT CONCAT(qt1.tag, ',', qt2.tag) AS tag_combination, SUM(q.score) AS total_score " +
       "FROM question_tag qt1 " +
       "JOIN question_tag qt2 ON qt1.question_id = qt2.question_id " +
       "JOIN question q ON qt1.question_id = q.question_id " +
-      "WHERE qt1.tag != qt2.tag " +
-      "GROUP BY qt1.tag, qt2.tag " +
+      "WHERE qt1.tag < qt2.tag " +
+      "GROUP BY tag_combination " +
       "ORDER BY total_score DESC", nativeQuery = true)
   List<Object[]> findTagCombinationScores();
 
-  @Query(value = "SELECT qt1.tag AS tag1, qt2.tag AS tag2, SUM(q.score) AS total_score " +
-      "FROM question_tag qt1 " +
-      "JOIN question_tag qt2 ON qt1.question_id = qt2.question_id " +
-      "JOIN question q ON qt1.question_id = q.question_id " +
-      "WHERE qt1.tag != qt2.tag " +
-      "GROUP BY qt1.tag, qt2.tag " +
-      "ORDER BY total_score DESC", nativeQuery = true)
+  @Query(value = "SELECT CONCAT(qt1.tag, ',', qt2.tag) AS tag_combination, SUM(q.view_count) AS total_view " +
+          "FROM question_tag qt1 " +
+          "JOIN question_tag qt2 ON qt1.question_id = qt2.question_id " +
+          "JOIN question q ON qt1.question_id = q.question_id " +
+          "WHERE qt1.tag < qt2.tag " +
+          "GROUP BY tag_combination " +
+          "ORDER BY total_view DESC", nativeQuery = true)
   List<Object[]> findTagCombinationViews();
 
 }

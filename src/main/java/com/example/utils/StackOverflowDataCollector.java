@@ -44,7 +44,7 @@ public class StackOverflowDataCollector {
 
   private static void getAndStoreAnswers(long quesitonId) throws Exception {
     String url = "https://api.stackexchange.com/2.3/questions/" + quesitonId
-        + "/answers?site=stackoverflow&key=" + API_KEY;
+        + "/answers?site=stackoverflow&filter=withbody&key=" + API_KEY;
     String json = getUrlContents(url);
     JSONObject obj = new JSONObject(json);
     JSONArray items = obj.getJSONArray("items");
@@ -56,7 +56,7 @@ public class StackOverflowDataCollector {
 
   private static void getAndStoreComments(long questionId) throws Exception {
     String url = "https://api.stackexchange.com/2.3/questions/" + questionId
-        + "/comments?site=stackoverflow&key=" + API_KEY;
+        + "/comments?site=stackoverflow&filter=withbody&key=" + API_KEY;
     String json = getUrlContents(url);
     JSONObject obj = new JSONObject(json);
     JSONArray items = obj.getJSONArray("items");
@@ -71,7 +71,7 @@ public class StackOverflowDataCollector {
     int count = 0;
     while (page <= MAX_PAGES) {
       String url = BASE_URL + "/questions?page=" + page + "&pagesize=" + PAGE_SIZE
-          + "&order=desc&sort=votes&tagged=" + TAG + "&site=stackoverflow&key=" + API_KEY;
+          + "&order=desc&sort=votes&tagged=" + TAG + "&site=stackoverflow&filter=withbody&key=" + API_KEY;
       String json = getUrlContents(url);
       JSONObject obj = new JSONObject(json);
       JSONArray items = obj.getJSONArray("items");
@@ -172,7 +172,7 @@ public class StackOverflowDataCollector {
 
   private static void storeComments(JSONObject item) throws Exception {
     PreparedStatement pstmt = conn.prepareStatement(
-        "INSERT INTO comment VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        "INSERT INTO comment VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
     if (item.has("owner")) {
       JSONObject owner = item.getJSONObject("owner");
@@ -224,6 +224,11 @@ public class StackOverflowDataCollector {
     } else {
       pstmt.setNull(8, Types.VARCHAR);
     }
+    if (item.has("body")) {
+      pstmt.setString(9, item.getString("body"));
+    } else {
+      pstmt.setNull(9, Types.VARCHAR);
+    }
 
     pstmt.executeUpdate();
     pstmt.close();
@@ -231,7 +236,7 @@ public class StackOverflowDataCollector {
 
   private static void storeAnswers(JSONObject item) throws Exception {
     PreparedStatement pstmt = conn.prepareStatement(
-        "INSERT INTO answer VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        "INSERT INTO answer VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
     if (item.has("owner")) {
       JSONObject owner = item.getJSONObject("owner");
@@ -282,6 +287,11 @@ public class StackOverflowDataCollector {
     } else {
       pstmt.setNull(9, Types.VARCHAR);
     }
+    if (item.has("body")) {
+      pstmt.setString(10, item.getString("body"));
+    } else {
+      pstmt.setNull(10, Types.VARCHAR);
+    }
 
     pstmt.executeUpdate();
     pstmt.close();
@@ -289,7 +299,7 @@ public class StackOverflowDataCollector {
 
   private static void storeQuestions(JSONObject item) throws Exception {
     PreparedStatement pstmt = conn.prepareStatement(
-        "INSERT INTO question VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        "INSERT INTO question VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
     if (item.has("owner")) {
       JSONObject owner = item.getJSONObject("owner");
@@ -360,6 +370,16 @@ public class StackOverflowDataCollector {
       pstmt.setString(13, item.getString("title"));
     } else {
       pstmt.setNull(13, Types.VARCHAR);
+    }
+    if (item.has("score")) {
+      pstmt.setLong(14, item.getLong("score"));
+    } else {
+      pstmt.setNull(14, Types.BIGINT);
+    }
+    if (item.has("body")) {
+      pstmt.setString(15, item.getString("body"));
+    } else {
+      pstmt.setNull(15, Types.VARCHAR);
     }
 
     pstmt.executeUpdate();

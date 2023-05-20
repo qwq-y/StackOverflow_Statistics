@@ -1,5 +1,5 @@
 爬取的questions中的数据示例：
-https://api.stackexchange.com/2.3/questions?page=1&pagesize=100&order=desc&sort=votes&tagged=java&site=stackoverflow
+https://api.stackexchange.com/2.3/questions?page=1&pagesize=100&order=desc&sort=votes&tagged=java&site=stackoverflow&filter=withbody
 
 {"tags":["java","c++","performance","cpu-architecture","branch-prediction"],
 "owner":{"account_id":31692,
@@ -14,18 +14,20 @@ https://api.stackexchange.com/2.3/questions?page=1&pagesize=100&order=desc&sort=
 "view_count":1810966,
 "protected_date":1399067470,
 "accepted_answer_id":11227902,
-"answer_count":25,"score":26979,
+"answer_count":25,
+"score":26979,
 "last_activity_date":1683824982,
 "creation_date":1340805096,
 "last_edit_date":1683824982,
 "question_id":11227809,
 "content_license":"CC BY-SA 4.0",
 "link":"https://stackoverflow.com/questions/11227809/why-is-processing-a-sorted-array-faster-than-processing-an-unsorted-array",
-"title":"Why is processing a sorted array faster than processing an unsorted array?"},
+"title":"Why is processing a sorted array faster than processing an unsorted array?",
+"body":..............................},
 
 
 comment数据示例：
-https://api.stackexchange.com/2.3/questions/11227809/comments?site=stackoverflow
+https://api.stackexchange.com/2.3/questions/11227809/comments?site=stackoverflow&filter=withbody
 
 {"owner":{"account_id":78868,
           "reputation":318994,
@@ -48,11 +50,12 @@ https://api.stackexchange.com/2.3/questions/11227809/comments?site=stackoverflow
 "creation_date":1657064804,
 "post_id":11227809,
 "comment_id":128719329,
-"content_license":"CC BY-SA 4.0"},
+"content_license":"CC BY-SA 4.0",
+"body":..............................},
 
 
 answer数据示例:
-https://api.stackexchange.com/2.3/questions/11227809/answers?site=stackoverflow
+https://api.stackexchange.com/2.3/questions/11227809/answers?site=stackoverflow&filter=withbody
 
 {"owner":{"account_id":78868,
           "reputation":318994,
@@ -69,7 +72,8 @@ https://api.stackexchange.com/2.3/questions/11227809/answers?site=stackoverflow
 "creation_date":1497786043,
 "answer_id":44614591,
 "question_id":11227809,
-"content_license":"CC BY-SA 4.0"},
+"content_license":"CC BY-SA 4.0",
+"body":..............................},
 
 
 已删除的user:
