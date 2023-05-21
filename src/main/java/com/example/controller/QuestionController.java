@@ -17,6 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
  * time and the posting time of the accepted answer)?
  * What percentage of questions have non-accepted answers (i.e., answers that are not marked as
  * accepted) that have received more upvotes than the accepted answers?
+ *
+ * Many users could participate in a thread discussion. What is the distribution of such participation (i.e.,
+ * the number of distinct users who post the question, answers, or comments in a thread)?
+ * Which are the most active users who frequently participate in thread discussions?
  */
 
 @RestController
@@ -67,6 +71,16 @@ public class QuestionController {
   @GetMapping("/countQuestionsWithLowerAcceptedAnswerScore")
   public Long getCountQuestionsWithLowerAcceptedAnswerScore() {
     return questionService.getCountQuestionsWithLowerAcceptedAnswerScore();
+  }
+
+  @GetMapping("/countUniqueUsersPerQuestion")
+  public List<Object[]> getCountUniqueUsersPerQuestion() {
+    return questionService.getCountUniqueUsersPerQuestion();
+  }
+
+  @GetMapping("/mostActiveUsersPerQuestion")
+  public List<Object[]> getMostActiveUsersPerQuestion() {
+    return questionService.getMostActiveUsersPerQuestion();
   }
 
 }

@@ -36,4 +36,45 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
       nativeQuery = true)
   long countQuestionsWithLowerAcceptedAnswerScore();
 
+  @Query(value = "SELECT q.question_id, COUNT(DISTINCT q.owner_account_id), " +
+          "COUNT(DISTINCT a.owner_account_id) AS answer_user_count, " +
+          "COUNT(DISTINCT c.owner_account_id) AS comment_user_count " +
+          "FROM question q " +
+          "LEFT JOIN answer a ON q.question_id = a.question_id " +
+          "LEFT JOIN comment c ON q.question_id = c.post_id " +
+          "GROUP BY q.question_id", nativeQuery = true)
+  List<Object[]> countUniqueUsersPerQuestion();
+
+  @Query(value = "SELECT q.question_id,\n"
+      + "       a.display_name AS most_active_answer_user,\n"
+      + "       a.cnt AS user_answer_cnt,\n"
+      + "       c.display_name AS most_active_comment_user,\n"
+      + "       c.cnt AS user_comment_cnt,\n"
+      + "       u.display_name AS most_active_user,\n"
+      + "       COALESCE(a.cnt, 0) + COALESCE(c.cnt, 0) AS total_activity_cnt\n"
+      + "FROM question q\n"
+      + "LEFT JOIN (\n"
+      + "    SELECT a.question_id, u.display_name, COUNT(DISTINCT a.answer_id) AS cnt,\n"
+      + "           ROW_NUMBER() OVER (PARTITION BY a.question_id ORDER BY COUNT(DISTINCT a.answer_id) DESC) AS rn\n"
+      + "    FROM answer a\n"
+      + "    JOIN user_ u ON u.account_id = a.owner_account_id\n"
+      + "    GROUP BY a.question_id, u.display_name\n"
+      + ") a ON a.question_id = q.question_id AND a.rn = 1\n"
+      + "LEFT JOIN (\n"
+      + "    SELECT c.post_id, u.display_name, COUNT(DISTINCT c.comment_id) AS cnt,\n"
+      + "           ROW_NUMBER() OVER (PARTITION BY c.post_id ORDER BY COUNT(DISTINCT c.comment_id) DESC) AS rn\n"
+      + "    FROM comment c\n"
+      + "    JOIN user_ u ON u.account_id = c.owner_account_id\n"
+      + "    GROUP BY c.post_id, u.display_name\n"
+      + ") c ON c.post_id = q.question_id AND c.rn = 1\n"
+      + "JOIN (\n"
+      + "    SELECT u.account_id, u.display_name, COALESCE(SUM(DISTINCT a.answer_id), 0) + COALESCE(SUM(DISTINCT c.comment_id), 0) AS total_cnt,\n"
+      + "           ROW_NUMBER() OVER (ORDER BY COALESCE(SUM(DISTINCT a.answer_id), 0) + COALESCE(SUM(DISTINCT c.comment_id), 0) DESC) AS rn\n"
+      + "    FROM user_ u\n"
+      + "    LEFT JOIN answer a ON u.account_id = a.owner_account_id\n"
+      + "    LEFT JOIN comment c ON u.account_id = c.owner_account_id\n"
+      + "    GROUP BY u.account_id, u.display_name\n"
+      + ") u ON u.rn = 1;", nativeQuery = true)
+  List<Object[]> findMostActiveUsersPerQuestion();
+
 }

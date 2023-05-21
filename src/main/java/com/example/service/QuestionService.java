@@ -48,4 +48,12 @@ public class QuestionService {
     return questionRepository.countQuestionsWithLowerAcceptedAnswerScore();
   }
 
+  public List<Object[]> getCountUniqueUsersPerQuestion() {
+    return questionRepository.countUniqueUsersPerQuestion();
+  }
+
+  public List<Object[]> getMostActiveUsersPerQuestion() {
+    return questionRepository.findMostActiveUsersPerQuestion();
+  }
+
 }
