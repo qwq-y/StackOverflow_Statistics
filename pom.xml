@@ -33,18 +33,16 @@
       <artifactId>spring-boot-starter-thymeleaf</artifactId>
     </dependency>
 
-    <!-- https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-boot-starter -->
     <dependency>
-      <groupId>com.baomidou</groupId>
-      <artifactId>mybatis-plus-boot-starter</artifactId>
-      <version>3.5.3.1</version>
+      <groupId>com.github.javaparser</groupId>
+      <artifactId>javaparser-core</artifactId>
+      <version>3.25.1</version>
     </dependency>
 
-    <!-- https://mvnrepository.com/artifact/com.alibaba/druid-spring-boot-starter -->
     <dependency>
-      <groupId>com.alibaba</groupId>
-      <artifactId>druid-spring-boot-starter</artifactId>
-      <version>1.2.15</version>
+      <groupId>org.commonmark</groupId>
+      <artifactId>commonmark</artifactId>
+      <version>0.18.0</version>
     </dependency>
 
     <dependency>

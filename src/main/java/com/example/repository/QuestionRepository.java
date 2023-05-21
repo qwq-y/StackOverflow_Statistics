@@ -1,7 +1,14 @@
 package com.example.repository;
 
 import com.example.model.Question;
+import com.example.utils.JavaAPIExtractor;
+import com.example.utils.JavaCodeExtractor;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -76,5 +83,10 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
       + "    GROUP BY u.account_id, u.display_name\n"
       + ") u ON u.rn = 1;", nativeQuery = true)
   List<Object[]> findMostActiveUsersPerQuestion();
+
+  @Query(value = "SELECT a.body FROM answer a UNION " +
+      "SELECT q.body FROM question q UNION " +
+      "SELECT c.body FROM comment c", nativeQuery = true)
+  List<String> findAllBodies();
 
 }

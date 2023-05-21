@@ -83,4 +83,9 @@ public class QuestionController {
     return questionService.getMostActiveUsersPerQuestion();
   }
 
+  @GetMapping("/javaAPIFrequency")
+  List<Object[]> getJavaAPIFrequency() {
+    return questionService.getJavaAPIFrequency();
+  }
+
 }

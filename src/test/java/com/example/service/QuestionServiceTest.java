@@ -34,10 +34,4 @@ public class QuestionServiceTest {
     System.out.println("# max answer count ===========> " + cnt);
   }
 
-//  @Test
-//  void testGetCountByAnswerCountGreaterThan() {
-//    long cnt = questionService.getCountByAnswerCountGreaterThan(Long.valueOf(10));
-//    System.out.println("# answer count greater than 10 ===========> " + cnt);
-//  }
-
 }
