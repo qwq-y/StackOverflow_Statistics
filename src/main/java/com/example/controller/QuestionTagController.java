@@ -1,10 +1,8 @@
 package com.example.controller;
 
 import com.example.model.QuestionTag;
-import java.util.ArrayList;
 import java.util.List;
 import com.example.service.QuestionTagService;
-import java.util.Map;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
