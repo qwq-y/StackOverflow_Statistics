@@ -49,7 +49,11 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
           "UNION " +
           "SELECT owner_account_id FROM comment WHERE post_id = q.question_id) AS subquery) AS total_user_count, " +
           "COUNT(DISTINCT a.owner_account_id) AS answer_user_count, " +
-          "COUNT(DISTINCT c.owner_account_id) AS comment_user_count " +
+          "COUNT(DISTINCT c.owner_account_id) AS comment_user_count, " +
+          "(SELECT COUNT(DISTINCT owner_account_id) FROM " +
+          "(SELECT owner_account_id FROM answer " +
+          "UNION " +
+          "SELECT owner_account_id FROM comment ) AS subquery) AS ccount "+
           "FROM question q " +
           "LEFT JOIN answer a ON q.question_id = a.question_id " +
           "LEFT JOIN comment c ON q.question_id = c.post_id " +
