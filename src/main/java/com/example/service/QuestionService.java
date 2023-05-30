@@ -4,7 +4,6 @@ import com.example.model.Question;
 import com.example.repository.QuestionRepository;
 import com.example.utils.CodeSnippetExtractor;
 import com.example.utils.JavaAPIExtractor;
-import com.example.utils.JavaCodeExtractor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

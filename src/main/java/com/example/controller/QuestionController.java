@@ -8,19 +8,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * What percentage of questions don't have any answer?
- * What is the average and maximum number of answers?
- * What is the distribution of the number of answers?
- *
- * What percentage of questions have accepted answers (one question could only have one accepted answer)?
- * What is the distribution of question resolution time (i.e., the duration between the question posting
- * time and the posting time of the accepted answer)?
- * What percentage of questions have non-accepted answers (i.e., answers that are not marked as
- * accepted) that have received more upvotes than the accepted answers?
- *
- * Many users could participate in a thread discussion. What is the distribution of such participation (i.e.,
- * the number of distinct users who post the question, answers, or comments in a thread)?
- * Which are the most active users who frequently participate in thread discussions?
+ * What percentage of questions don't have any answer? What is the average and maximum number of
+ * answers? What is the distribution of the number of answers?
+ * <p>
+ * What percentage of questions have accepted answers (one question could only have one accepted
+ * answer)? What is the distribution of question resolution time (i.e., the duration between the
+ * question posting time and the posting time of the accepted answer)? What percentage of questions
+ * have non-accepted answers (i.e., answers that are not marked as accepted) that have received more
+ * upvotes than the accepted answers?
+ * <p>
+ * Many users could participate in a thread discussion. What is the distribution of such
+ * participation (i.e., the number of distinct users who post the question, answers, or comments in
+ * a thread)? Which are the most active users who frequently participate in thread discussions?
  */
 
 @RestController
